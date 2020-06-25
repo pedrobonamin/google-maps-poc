@@ -32,14 +32,18 @@ const MyMapWithAutocomplete = () => {
 
   useEffect(() => {
     if (useLocation) {
-      navigator.geolocation.getCurrentPosition((loc) => {
-        const latLng = {
-          lat: loc.coords.latitude,
-          lng: loc.coords.longitude,
-        };
-        setCenter(latLng);
-        setMarkerPostion(latLng);
-      });
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition((loc) => {
+          const latLng = {
+            lat: loc.coords.latitude,
+            lng: loc.coords.longitude,
+          };
+          setCenter(latLng);
+          setMarkerPostion(latLng);
+        });
+      } else{
+        alert("Lo sentimos, tu navegador no soporta geolocalizacion")
+      }
     }
   }, [useLocation]);
 
