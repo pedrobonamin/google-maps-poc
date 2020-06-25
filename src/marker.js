@@ -49,6 +49,12 @@ const MarkerWithInfo = (props) => {
     props.setSelectedQiraPoint(!selected ? props.dp: undefined)
     setSelected(!selected)
   }
+
+  const closeInfo = () => {
+    props.setDirectionsResponse(undefined)
+    props.setSelectedQiraPoint(undefined)
+    setSelected(false)
+  }
   return (
       <Marker
         key={props.dp.position.lng + props.dp.position.lat}
@@ -57,10 +63,11 @@ const MarkerWithInfo = (props) => {
         icon={icon}
         onClick={() => setOpenInfo(!openInfo)}
         setAnimation='BOUNCE'
+        zIndex='10'
       >
         {Directions}
         {openInfo && (
-          <InfoWindow >
+          <InfoWindow onCloseClick={closeInfo} >
             <div style={divStyle}>
               <h1>QIRA POINT</h1>
               <h3>{props.dp.name}</h3>

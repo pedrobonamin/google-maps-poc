@@ -5,40 +5,13 @@ import {
   LoadScript,
   Marker,
   MarkerClusterer,
-  DirectionsRenderer
+  DirectionsRenderer,
 } from "@react-google-maps/api";
 import MarkerWithInfo from "./marker";
 import deliverysPoints from "./qiraPoints.json";
+import { darkModeStyle, mapContainerStyle, autoCompleteStyle, containerStyle } from "./mapStyles";
 
-const mapContainerStyle = {
-  height: "600px",
-  width: "1200px",
-  margin: "40px",
-};
-
-const autoCompleteStyle = {
-  boxSizing: `border-box`,
-  border: `1px solid transparent`,
-  width: `300px`,
-  height: `40px`,
-  padding: `0 12px`,
-  borderRadius: `3px`,
-  boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-  fontSize: `14px`,
-  outline: `none`,
-  textOverflow: `ellipses`,
-  position: "absolute",
-  left: "50%",
-  top: "2%",
-  marginLeft: "-120px",
-};
-
-const containerStyle = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-};
-const libraries = ["places"];
+const libraries = ["places", 'directions'];
 
 const MyMapWithAutocomplete = () => {
   const [useLocation, setUseLocation] = useState(false);
@@ -55,6 +28,7 @@ const MyMapWithAutocomplete = () => {
   const [directionsResponse, setDirectionsResponse] = useState();
   const [selectedQiraPoint, setSelectedQiraPoint] = useState();
   const [distance, setDistance] = useState();
+  const [darkMode, setDarkMode]= useState(false)
 
   useEffect(() => {
     if (useLocation) {
@@ -116,12 +90,17 @@ const MyMapWithAutocomplete = () => {
         libraries={libraries}
       >
         <GoogleMap
-          id="searchbox-example"
+          id="google-maps"
           mapContainerStyle={mapContainerStyle}
           zoom={5}
           center={center}
           onLoad={onLoad}
-          options={{ streetViewControl: false }}
+          options={{ 
+            fullscreenControl: false,
+            mapTypeControl: false,
+            streetViewControl: false, 
+            styles: darkMode && darkModeStyle
+          }}
         >
           <Autocomplete
             onLoad={onLoadAutocomplete}
@@ -159,6 +138,9 @@ const MyMapWithAutocomplete = () => {
             }
           </MarkerClusterer>
         </GoogleMap>
+          <button onClick={() => setDarkMode(!darkMode)}>
+        darkMode 
+      </button>
       </LoadScript>
       <div style={{ textAlign: "left", margin: "15px" }}>
         Ubicación del marcador
@@ -172,6 +154,7 @@ const MyMapWithAutocomplete = () => {
       <button onClick={() => setUseLocation(!useLocation)}>
         Usar ubicación actual
       </button>
+  
       {selectedQiraPoint && (
         <div>Qira point seleccionado: {selectedQiraPoint.name}</div>
       )}
