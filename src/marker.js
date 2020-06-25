@@ -19,6 +19,7 @@ const MarkerWithInfo = (props) => {
 
   useEffect(() => {
     setSelected(props.selectedQiraPoint?.key === props.dp.key )
+    // eslint-disable-next-line 
   }, [props.selectedQiraPoint])
 
   const directionsCallback = (response) => {
@@ -77,7 +78,7 @@ const MarkerWithInfo = (props) => {
               <h1>QIRA POINT</h1>
               <h3>{props.dp.name}</h3>
               <div>Horarios: Lunes a viernes de 8 a 18</div>
-                <h3>Distancia de envío: {distance} </h3>
+                <h3>{distance ? `Distancia de envío: ${distance}` : 'Ingresa tu dirección para calcular distancias'}</h3>
               <button onClick={selectQiraPoint}>
                  {selected ? 'Cancelar' :'Seleccionar' } Qira Point
                   </button>

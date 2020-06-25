@@ -13,7 +13,7 @@ import {
   darkModeStyle,
   mapContainerStyle,
   autoCompleteStyle,
-  containerStyle,
+  containerStyle
 } from "./mapStyles";
 
 const libraries = ["places", "directions"];
@@ -25,10 +25,7 @@ const MyMapWithAutocomplete = () => {
     lng: -61.44526640390625,
     lat: -33.0044060531599,
   });
-  const [markerPosition, setMarkerPostion] = useState({
-    lng: -61.44526640390625,
-    lat: -33.0044060531599,
-  });
+  const [markerPosition, setMarkerPostion] = useState();
   const [directionsResponse, setDirectionsResponse] = useState();
   const [selectedQiraPoint, setSelectedQiraPoint] = useState();
   const [distance, setDistance] = useState();
@@ -36,18 +33,24 @@ const MyMapWithAutocomplete = () => {
 
   useEffect(() => {
     if (navigator.geolocation) {
-      console.log('GEOLOCALIZATION')
-      navigator.geolocation.getCurrentPosition((loc) => {
-        const latLng = {
-          lat: loc.coords.latitude,
-          lng: loc.coords.longitude,
-        };
-        setCenter(latLng);
-        setMarkerPostion(latLng);
-      }, () => alert("Lo sentimos, tu navegador no soporta geolocalizacion, ingresa tu dirección")
+      navigator.geolocation.getCurrentPosition(
+        (loc) => {
+          const latLng = {
+            lat: loc.coords.latitude,
+            lng: loc.coords.longitude,
+          };
+          setCenter(latLng);
+          setMarkerPostion(latLng);
+        },
+        () =>
+          alert(
+            "Lo sentimos, tu navegador no soporta geolocalizacion, ingresa tu dirección"
+          )
       );
     } else {
-      alert("Lo sentimos, tu navegador no soporta geolocalizacion, ingresa tu dirección");
+      alert(
+        "Lo sentimos, tu navegador no soporta geolocalizacion, ingresa tu dirección"
+      );
     }
   }, []);
 
@@ -73,7 +76,6 @@ const MyMapWithAutocomplete = () => {
       setCenter(latLng);
       setMarkerPostion(latLng);
       mapRef.fitBounds(autocomplete.getPlace().geometry.viewport);
-      console.log("GET PLACE :", autocomplete.getPlace());
     } else {
       console.log("Autocomplete is not loaded yet!");
     }
@@ -128,7 +130,7 @@ const MyMapWithAutocomplete = () => {
             draggable
             onDragEnd={(event) => onMarkerDragEnd(event)}
             position={markerPosition}
-            z-index="10"
+            zIndex={10}
           />
           <MarkerClusterer options={options}>
             {(clusterer) =>
@@ -149,15 +151,17 @@ const MyMapWithAutocomplete = () => {
         </GoogleMap>
         <button onClick={() => setDarkMode(!darkMode)}>darkMode</button>
       </LoadScript>
-      <div style={{ textAlign: "left", margin: "15px" }}>
-        Ubicación del marcador
-        <br />
-        lng: {markerPosition.lng},
-        <br />
-        lat: {markerPosition.lat}
-        <br />
-        Distancia: {distance}
-      </div>
+      {markerPosition && (
+        <div style={{ textAlign: "left", margin: "15px" }}>
+          Ubicación del marcador
+          <br />
+          lng: {markerPosition.lng},
+          <br />
+          lat: {markerPosition.lat}
+          <br />
+          Distancia: {distance}
+        </div>
+      )}
       {selectedQiraPoint && (
         <div>Qira point seleccionado: {selectedQiraPoint.name}</div>
       )}

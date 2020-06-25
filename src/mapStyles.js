@@ -103,6 +103,25 @@ export const darkModeStyle = [
     marginLeft: '-140px'
   };
 
+  export const autoCompleteStyleNoLocation = {
+    boxSizing: `border-box`,
+    border: `2px solid transparent`,
+    width: `300px`,
+    height: `60px`,
+    padding: `0 20px`,
+    borderRadius: `3px`,
+    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+    fontSize: `14px`,
+    outline: `none`,
+    textOverflow: `ellipses`,
+    alignSelf: 'center',
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    marginLeft: '-140px',
+    zIndex: 10
+  };
+
   export const containerStyle = {
     display: "flex",
     flexDirection: "column",
