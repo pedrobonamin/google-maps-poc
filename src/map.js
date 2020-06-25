@@ -1,25 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   GoogleMap,
   Autocomplete,
   LoadScript,
   Marker,
   MarkerClusterer,
+  DirectionsService,
+  DirectionsRenderer,
 } from "@react-google-maps/api";
 import MarkerWithInfo from "./marker";
-import deliverysPoints from './qiraPoints.json'
+import deliverysPoints from "./qiraPoints.json";
 
 const mapContainerStyle = {
   height: "400px",
   width: "800px",
-  margin: '40px'
+  margin: "40px",
+};
+
+const autoCompleteStyle = {
+  boxSizing: `border-box`,
+  border: `1px solid transparent`,
+  width: `300px`,
+  height: `40px`,
+  padding: `0 12px`,
+  borderRadius: `3px`,
+  boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+  fontSize: `14px`,
+  outline: `none`,
+  textOverflow: `ellipses`,
+  position: "absolute",
+  left: "50%",
+  top: "2%",
+  marginLeft: "-120px",
 };
 
 const containerStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
-}
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+};
 const libraries = ["places"];
 
 const MyMapWithAutocomplete = () => {
@@ -34,8 +53,10 @@ const MyMapWithAutocomplete = () => {
     lng: -60.5745999,
     lat: -33.8912831,
   });
+  const [directionsResponse, setDirectionsResponse] = useState();
+  const [selectedQiraPoint, setSelectedQiraPoint] = useState();
+  const [distance, setDistance] = useState();
 
-  // To set users current location
   useEffect(() => {
     if (useLocation) {
       navigator.geolocation.getCurrentPosition((loc) => {
@@ -74,7 +95,6 @@ const MyMapWithAutocomplete = () => {
   };
 
   const onMarkerDragEnd = (event) => {
-    console.log("coord", event);
     const { latLng } = event;
     const lat = latLng.lat();
     const lng = latLng.lng();
@@ -85,6 +105,32 @@ const MyMapWithAutocomplete = () => {
     imagePath:
       "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
   };
+
+  const directionsCallback = (response) => {
+    if (response !== null) {
+      if (response.status === "OK") {
+        setDistance(response.routes[0].legs[0].distance.text);
+        setDirectionsResponse(response);
+      } else {
+        console.log("response: ", response);
+      }
+    }
+  };
+
+  const Directions = useMemo(() => {
+    if (selectedQiraPoint) {
+      return (
+        <DirectionsService
+          options={{
+            destination: deliverysPoints[selectedQiraPoint].position,
+            origin: markerPosition,
+            travelMode: "DRIVING",
+          }}
+          callback={(response) => directionsCallback(response)}
+        />
+      );
+    }
+  }, [markerPosition, selectedQiraPoint]);
 
   return (
     <div style={containerStyle}>
@@ -98,9 +144,7 @@ const MyMapWithAutocomplete = () => {
           zoom={5}
           center={center}
           onLoad={onLoad}
-          options={{
-            streetViewControl: false,
-          }}
+          options={{ streetViewControl: false }}
         >
           <Autocomplete
             onLoad={onLoadAutocomplete}
@@ -109,48 +153,42 @@ const MyMapWithAutocomplete = () => {
             <input
               type="text"
               placeholder="Ingresá tu dirección"
-              style={{
-                boxSizing: `border-box`,
-                border: `1px solid transparent`,
-                width: `300px`,
-                height: `40px`,
-                padding: `0 12px`,
-                borderRadius: `3px`,
-                boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                fontSize: `14px`,
-                outline: `none`,
-                textOverflow: `ellipses`,
-                position: "absolute",
-                left: "50%",
-                top: "2%",
-                marginLeft: "-120px",
-              }}
+              style={autoCompleteStyle}
             />
           </Autocomplete>
+          {selectedQiraPoint && Directions}
+          {directionsResponse && (
+            <DirectionsRenderer options={{ directions: directionsResponse }} />
+          )}
           <Marker
             label="Tu ubicación"
             draggable
-            onDrag={() => console.log("ON DRAG")}
             onDragEnd={(event) => onMarkerDragEnd(event)}
             position={markerPosition}
           />
           <MarkerClusterer options={options}>
             {(clusterer) =>
-              deliverysPoints.map((dp) => (
-                <MarkerWithInfo dp={dp} clusterer={clusterer} />
+              deliverysPoints.map((dp, index) => (
+                <MarkerWithInfo
+                  index={index}
+                  setSelectedQiraPoint={setSelectedQiraPoint}
+                  dp={dp}
+                  clusterer={clusterer}
+                />
               ))
             }
           </MarkerClusterer>
         </GoogleMap>
       </LoadScript>
-      <div style={{ textAlign: "left" , margin: '15px'}}>
+      <div style={{ textAlign: "left", margin: "15px" }}>
         Ubicación del marcador
         <br />
         lng: {markerPosition.lng},
         <br />
         lat: {markerPosition.lat}
+        <br />
+        Distancia: {distance}
       </div>
-
       <button onClick={() => setUseLocation(!useLocation)}>
         Usar ubicación actual
       </button>

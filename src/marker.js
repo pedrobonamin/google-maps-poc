@@ -15,7 +15,6 @@ const MarkerWithInfo = (props) => {
   };
 
   return (
-    <>
       <Marker
         key={props.dp.position.lng + props.dp.position.lat}
         position={props.dp.position}
@@ -25,16 +24,16 @@ const MarkerWithInfo = (props) => {
         setAnimation='BOUNCE'
       >
         {openInfo && (
-          <InfoWindow onClick={() => setOpenInfo(!openInfo)}>
+          <InfoWindow >
             <div style={divStyle}>
               <h1>QIRA POINT</h1>
               <h3>{props.dp.name}</h3>
-              <text>Horarios: Lunes a viernes de 8 a 18</text>
+              <div>Horarios: Lunes a viernes de 8 a 18</div>
+              <button onClick={() => props.setSelectedQiraPoint(props.index)}>Seleccionar DP</button>
             </div>
           </InfoWindow>
         )}
       </Marker>
-    </>
   );
 };
 
