@@ -130,6 +130,7 @@ const MyMapWithAutocomplete = () => {
                   markerPosition={markerPosition}
                   setDirectionsResponse={setDirectionsResponse}
                   index={index}
+                  selectedQiraPoint={selectedQiraPoint}
                   setSelectedQiraPoint={setSelectedQiraPoint}
                   dp={dp}
                   clusterer={clusterer}

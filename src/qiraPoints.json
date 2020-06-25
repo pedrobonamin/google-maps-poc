@@ -4,62 +4,71 @@
     "position": {
       "lng": -61.1650211,
       "lat": -33.044522
-    }
+    },
+    "key": 1
   },
   {
     "name": "Carcaraña",
     "position": {
       "lng": -61.13206211562501,
       "lat": -32.86014444932824
-    }
+    },
+    "key": 2
   },
   {
     "name": "S.J de la esquina",
     "position": {
       "lng": -61.80222813125001,
       "lat": -33.083652647213874
-    }
+    },
+    "key": 3
   },
   {
     "name": "Saladillo",
     "position": {
       "lng": -59.7794795,
       "lat": -35.6388799
-    }
+    },
+    "key": 4
   },
   {
     "name": "El trigo",
     "position": {
       "lng": -59.390838142578126,
       "lat": -35.877364040492274
-    }
+    },
+    "key": 5
   },
   {
     "name": "Perez",
     "position": {
       "lng": -60.77543906093747,
       "lat": -32.99959858370884
-    }
+    },
+    "key": 6
   },
   {
     "name": "Pilar",
     "position": {
       "lng": -63.8704983375,
       "lat": -31.680618792090023
-    }
+    },
+    "key": 7
   },
   {
     "name": "Río Tercero",
     "position": {
       "lng": -64.10121122812501,
       "lat": -32.170152835430905
-    }
+    },
+    "key": 8
   },
   {
     "name": "La falda",
     "position": {
       "lng": -64.49122587656252,
       "lat": -31.0897546311226
-    }
+    },
+    "key": 9
   }
 ]

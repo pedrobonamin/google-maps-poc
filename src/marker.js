@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Marker, InfoWindow, DirectionsService } from "@react-google-maps/api";
 
 const divStyle = {
@@ -17,6 +17,9 @@ const MarkerWithInfo = (props) => {
   const [response, setResponse] = useState()
   const [selected, setSelected] = useState(false)
 
+  useEffect(() => {
+    setSelected(props.selectedQiraPoint?.key === props.dp.key )
+  }, [props.selectedQiraPoint])
 
   const directionsCallback = (response) => {
     if (response !== null) {
@@ -51,9 +54,11 @@ const MarkerWithInfo = (props) => {
   }
 
   const closeInfo = () => {
-    props.setDirectionsResponse(undefined)
-    props.setSelectedQiraPoint(undefined)
-    setSelected(false)
+    if(selected){
+      props.setDirectionsResponse(undefined)
+      props.setSelectedQiraPoint(undefined)
+      setSelected(false)
+    }
   }
   return (
       <Marker
@@ -63,7 +68,7 @@ const MarkerWithInfo = (props) => {
         icon={icon}
         onClick={() => setOpenInfo(!openInfo)}
         setAnimation='BOUNCE'
-        zIndex='10'
+        zIndex={10}
       >
         {Directions}
         {openInfo && (
