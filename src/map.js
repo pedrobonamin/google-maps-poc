@@ -86,7 +86,7 @@ const MyMapWithAutocomplete = () => {
   return (
     <div style={containerStyle}>
       <LoadScript
-        googleMapsApiKey="AIzaSyDaw5GpzQ_oruEhClU651JWYRnAICKPulU"
+        googleMapsApiKey={process.env.REACT_APP_MAPS_API_KEY}
         libraries={libraries}
       >
         <GoogleMap
